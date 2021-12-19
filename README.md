@@ -11,6 +11,21 @@
 7.  Проверяем готовность Nexus через [бразуер](http://localhost:8081)
 8. Подключаемся под admin\admin123, меняем пароль, сохраняем анонимный доступ
 
+---
+
+Создал директорию `infrastructure/terraform`, прописал настройки провайдера  YC и виртуальных машин, а так же вывод IP адресов в `main.tf` и `output.tf`. Для доступа к ВМ по ssh создал пользователя и указал публичный ключ в `meta.txt` в виде:
+
+```yml
+#cloud-config
+users:
+  - name: maxship
+    groups: sudo
+    shell: /bin/bash
+    sudo: ['ALL=(ALL) NOPASSWD:ALL']
+    ssh-authorized-keys:
+      - "ssh-ed25519 <содержимое ключа> m.o.shipitsyn@mail.ru"
+```
+
 ## Знакомоство с SonarQube
 
 ### Основная часть

@@ -36,7 +36,6 @@ resource "yandex_compute_instance" "sonar01" {
 
   metadata = {
     user-data = "${file("./meta.txt")}"
-    #ssh-keys = "${file("~/.ssh/id_ed25519.pub")}"
   }  
 }
 
@@ -62,7 +61,8 @@ resource "yandex_compute_instance" "nexus01" {
   }
 
   metadata = {
-    user-data = "${file("./meta.txt")}"
+    #user-data = "${file("./meta.txt")}"
+    ssh-keys: "~/.ssh/id_ed25519.pub"
   }  
 }
 
