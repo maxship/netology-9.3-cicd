@@ -13,7 +13,7 @@
 
 ---
 
-Создал директорию `infrastructure/terraform`, прописал настройки провайдера  YC и виртуальных машин, а так же вывод IP адресов в `main.tf` и `output.tf`. Для доступа к ВМ по ssh создал пользователя и указал публичный ключ в `meta.txt` в виде:
+1. Создал директорию `infrastructure/terraform`, прописал настройки провайдера YC, виртуальных машин, а так же вывод IP адресов в `main.tf` и `output.tf`. Разрешил входящие соединения на порты `9000` и `8081`. Для доступа к ВМ по ssh создал пользователя и указал публичный ключ в `meta.txt` в виде:
 
 ```yml
 #cloud-config
@@ -25,6 +25,30 @@ users:
     ssh-authorized-keys:
       - "ssh-ed25519 <содержимое ключа> m.o.shipitsyn@mail.ru"
 ```
+
+Применил конфигурацию:
+
+```bash
+$ terraform apply
+Apply complete! Resources: 4 added, 0 changed, 0 destroyed.
+
+Outputs:
+
+external_ip_nexus01 = "62.84.127.16"
+external_ip_sonar01 = "62.84.124.162"
+```
+2. Полученные IP адреса прописал в `infrastructure/inventory/cicd/hosts.yml`.
+3. Добавил `id_ed25519.pub` в `infrastructure/files`.
+4. Запустил плейбук:
+
+```sh
+$ ansible-playbook -i inventory/cicd/ site.yml -vv
+PLAY RECAP ************************************************************************************************************************************
+nexus-01                   : ok=17   changed=15   unreachable=0    failed=0    skipped=2    rescued=0    ignored=0   
+sonar-01                   : ok=35   changed=27   unreachable=0    failed=0    skipped=0    rescued=0    ignored=0 
+```
+
+5. Проверил доступность сервисов, поменял пароли.
 
 ## Знакомоство с SonarQube
 
