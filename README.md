@@ -57,8 +57,35 @@ sonar-01                   : ok=35   changed=27   unreachable=0    failed=0    s
 1. Создаём новый проект, название произвольное
 2. Скачиваем пакет sonar-scanner, который нам предлагает скачать сам sonarqube
 3. Делаем так, чтобы binary был доступен через вызов в shell (или меняем переменную PATH или любой другой удобный вам способ)
+
+Разархивировал sonarqube, запустил в директории bin команду
+
+```sh
+$ export PATH=$PATH:$(pwd)
+```
+
 4. Проверяем `sonar-scanner --version`
+
+```sh
+$ sonar-scanner --version
+INFO: Scanner configuration file: /home/maxship/Downloads/sonar-scanner-4.6.2.2472-linux/conf/sonar-scanner.properties
+INFO: Project root configuration file: NONE
+INFO: SonarScanner 4.6.2.2472
+INFO: Java 11.0.11 AdoptOpenJDK (64-bit)
+INFO: Linux 5.11.0-43-generic amd64
+```
+
 5. Запускаем анализатор против кода из директории [example](./example) с дополнительным ключом `-Dsonar.coverage.exclusions=fail.py`
+
+```sh
+sonar-scanner \
+  -Dsonar.projectKey=my_project_01 \
+  -Dsonar.sources=. \
+  -Dsonar.host.url=http://62.84.124.162:9000 \
+  -Dsonar.login=2e2516b60a03b77e516a30c2614e52ae49149dd1 \
+  -Dsonar.coverage.exclusions=fail.py
+```
+
 6. Смотрим результат в интерфейсе
 7. Исправляем ошибки, которые он выявил(включая warnings)
 8. Запускаем анализатор повторно - проверяем, что QG пройдены успешно
