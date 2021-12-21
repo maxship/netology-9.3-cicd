@@ -13,7 +13,7 @@
 
 ---
 
-1. Создал директорию `infrastructure/terraform`, прописал настройки провайдера YC, виртуальных машин, а так же вывод IP адресов в `main.tf` и `output.tf`. Разрешил входящие соединения на порты `9000` и `8081`. Для доступа к ВМ по ssh создал пользователя и указал публичный ключ в `meta.txt` в виде:
+1. Создал директорию `infrastructure/terraform`, прописал настройки провайдера YC, виртуальных машин в `main.tf`, а так же вывод внешних IP адресов в и `output.tf`. Для доступа к ВМ по ssh создал пользователя и указал публичный ключ в `meta.txt` в виде:
 
 ```yml
 #cloud-config
@@ -112,6 +112,28 @@ sonar-scanner \
 2. В него же загружаем такой же артефакт, но с version: 8_102
 3. Проверяем, что все файлы загрузились успешно
 4. В ответе присылаем файл `maven-metadata.xml` для этого артефекта
+
+---
+
+После загрузки в репозитроий двух артефактов`maven-metadata.xml` выглядит так:
+
+```xml
+<metadata modelVersion="1.1.0">
+  <groupId>netology</groupId>
+  <artifactId>java</artifactId>
+  <versioning>
+    <latest>8_282</latest>
+    <release>8_282</release>
+    <versions>
+      <version>8_102</version>
+      <version>8_282</version>
+    </versions>
+    <lastUpdated>20211221094918</lastUpdated>
+  </versioning>
+</metadata>
+```
+![nexus01](https://user-images.githubusercontent.com/72273610/146909686-ea92c5e9-7944-4b94-9bb3-49ccd4fecc02.png)
+
 
 ### Знакомство с Maven
 
