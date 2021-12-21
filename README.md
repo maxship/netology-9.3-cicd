@@ -34,7 +34,7 @@ Apply complete! Resources: 4 added, 0 changed, 0 destroyed.
 
 Outputs:
 
-external_ip_nexus01 = "62.84.127.16"
+external_ip_nexus01 = "62.84.124.14"
 external_ip_sonar01 = "62.84.124.162"
 ```
 2. Полученные IP адреса прописал в `infrastructure/inventory/cicd/hosts.yml`.
@@ -57,6 +57,8 @@ sonar-01                   : ok=35   changed=27   unreachable=0    failed=0    s
 1. Создаём новый проект, название произвольное
 2. Скачиваем пакет sonar-scanner, который нам предлагает скачать сам sonarqube
 3. Делаем так, чтобы binary был доступен через вызов в shell (или меняем переменную PATH или любой другой удобный вам способ)
+
+---
 
 Разархивировал sonarqube, запустил в директории bin команду
 
@@ -142,13 +144,91 @@ sonar-scanner \
 1. Скачиваем дистрибутив с [maven](https://maven.apache.org/download.cgi)
 2. Разархивируем, делаем так, чтобы binary был доступен через вызов в shell (или меняем переменную PATH или любой другой удобный вам способ)
 3. Удаляем из `apache-maven-<version>/conf/settings.xml` упоминание о правиле, отвергающем http соединение( раздел mirrors->id: my-repository-http-unblocker)
+
+Удалил участок кода:
+
+```xml
+<mirror>
+      <id>maven-default-http-blocker</id>
+      <mirrorOf>external:http:*</mirrorOf>
+      <name>Pseudo repository to mirror external repositories in>
+      <url>http://0.0.0.0/</url>
+      <blocked>true</blocked>
+    </mirror>
+  </mirrors>
+```
+
 4. Проверяем `mvn --version`
+
+```sh
+$ mvn --version
+Apache Maven 3.8.4 (9b656c72d54e5bacbed989b64718c159fe39b537)
+Maven home: /home/maxship/Downloads/apache-maven-3.8.4
+Java version: 11.0.13, vendor: Ubuntu, runtime: /usr/lib/jvm/java-11-openjdk-amd64
+Default locale: en_US, platform encoding: UTF-8
+OS name: "linux", version: "5.11.0-43-generic", arch: "amd64", family: "unix"
+```
+
 5. Забираем директорию [mvn](./mvn) с pom
 
 ### Основная часть
 
 1. Меняем в `pom.xml` блок с зависимостями под наш артефакт из первого пункта задания для Nexus (java с версией 8_282)
+
+```xml
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+ 
+  <groupId>com.netology.app</groupId>
+  <artifactId>simple-app</artifactId>
+  <version>1.0-SNAPSHOT</version>
+   <repositories>
+    <repository>
+      <id>my-repo</id>
+      <name>maven-public</name>
+      <url>http://62.84.124.14/:8081/repository/maven-public/</url>
+    </repository>
+  </repositories>
+  <dependencies>
+    <dependency>
+      <groupId>netology</groupId>
+      <artifactId>java</artifactId>
+      <version>8_102</version>
+      <classifier>distrib</classifier>
+      <type>tar.gz</type>
+    </dependency>
+  </dependencies>
+</project>
+```
+
 2. Запускаем команду `mvn package` в директории с `pom.xml`, ожидаем успешного окончания
+
+При запуске `mvn package` получаю ошибку, пока не разобрался в чем дело. 
+
+```bash
+$ mvn package
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] --------------------< com.netology.app:simple-app >---------------------
+[INFO] Building simple-app 1.0-SNAPSHOT
+[INFO] --------------------------------[ jar ]---------------------------------
+Downloading from my-repo: http://62.84.124.14/:8081/repository/maven-public/netology/java/8_102/java-8_102.pom
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD FAILURE
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  0.329 s
+[INFO] Finished at: 2021-12-21T17:56:24+06:00
+[INFO] ------------------------------------------------------------------------
+[ERROR] Failed to execute goal on project simple-app: Could not resolve dependencies for project com.netology.app:simple-app:jar:1.0-SNAPSHOT: Failed to collect dependencies at netology:java:tar.gz:distrib:8_102: Failed to read artifact descriptor for netology:java:tar.gz:distrib:8_102: Could not transfer artifact netology:java:pom:8_102 from/to my-repo (http://62.84.124.14/:8081/repository/maven-public/): transfer failed for http://62.84.124.14/:8081/repository/maven-public/netology/java/8_102/java-8_102.pom: Connect to 62.84.124.14:80 [/62.84.124.14] failed: Connection refused (Connection refused) -> [Help 1]
+[ERROR] 
+[ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
+[ERROR] Re-run Maven using the -X switch to enable full debug logging.
+[ERROR] 
+[ERROR] For more information about the errors and possible solutions, please read the following articles:
+[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/DependencyResolutionException
+```
+
 3. Проверяем директорию `~/.m2/repository/`, находим наш артефакт
 4. В ответе присылаем исправленный файл `pom.xml`
 

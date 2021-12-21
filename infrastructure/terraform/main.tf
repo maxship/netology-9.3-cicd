@@ -17,6 +17,7 @@ provider "yandex" {
 resource "yandex_compute_instance" "sonar01" {
   name = "sonar-01"
   platform_id = "standard-v1"
+  allow_stopping_for_update = true
 
   resources {
     cores = 2
@@ -43,10 +44,11 @@ resource "yandex_compute_instance" "sonar01" {
 resource "yandex_compute_instance" "nexus01" {
   name = "nexus-01"
   platform_id = "standard-v1"
+  allow_stopping_for_update = true
 
   resources {
     cores = 2
-    memory = 4
+    memory = 8
   }
 
   boot_disk {
