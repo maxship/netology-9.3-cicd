@@ -102,7 +102,7 @@ sonar-scanner \
 
 
 ## Знакомство с Nexus
-
+ 
 ### Основная часть
 
 1. В репозиторий `maven-public` загружаем артефакт с GAV параметрами:
@@ -134,6 +134,7 @@ sonar-scanner \
   </versioning>
 </metadata>
 ```
+
 ![nexus01](https://user-images.githubusercontent.com/72273610/146909686-ea92c5e9-7944-4b94-9bb3-49ccd4fecc02.png)
 
 
@@ -143,6 +144,16 @@ sonar-scanner \
 
 1. Скачиваем дистрибутив с [maven](https://maven.apache.org/download.cgi)
 2. Разархивируем, делаем так, чтобы binary был доступен через вызов в shell (или меняем переменную PATH или любой другой удобный вам способ)
+
+```sh
+$ sudo mkdir /usr/local/maven
+cd /usr/local/maven
+$ sudo wget https://dlcdn.apache.org/maven/maven-3/3.8.4/binaries/apache-maven-3.8.4-bin.zip
+$ sudo unzip apache-maven-3.8.4-bin.zip
+$ sudo rm apache-maven-3.8.4-bin.zip
+$ sudo ln -s /usr/local/maven/apache-maven-3.8.4/bin/mvn /usr/bin/mvn
+```
+
 3. Удаляем из `apache-maven-<version>/conf/settings.xml` упоминание о правиле, отвергающем http соединение( раздел mirrors->id: my-repository-http-unblocker)
 
 Удалил участок кода:
@@ -228,6 +239,21 @@ Downloading from my-repo: http://62.84.124.14/:8081/repository/maven-public/neto
 [ERROR] For more information about the errors and possible solutions, please read the following articles:
 [ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/DependencyResolutionException
 ```
+Из вывода можно предположить, что он пытается присоединиться к 80 порту. Нашел в настройках блок
+
+```xml
+    <proxy>
+      <id>optional</id>
+      <active>true</active>
+      <protocol>http</protocol>
+      <username>proxyuser</username>
+      <password>proxypass</password>
+      <host>proxy.host.net</host>
+      <port>80</port>
+      <nonProxyHosts>local.net|some.host.com</nonProxyHo>
+    </proxy>
+```
+Удалил - не помогло.
 
 3. Проверяем директорию `~/.m2/repository/`, находим наш артефакт
 4. В ответе присылаем исправленный файл `pom.xml`

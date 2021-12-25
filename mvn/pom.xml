@@ -9,7 +9,7 @@
     <repository>
       <id>my-repo</id>
       <name>maven-public</name>
-      <url>http://62.84.124.14/:8081/repository/maven-public/</url>
+      <url>http://51.250.1.216/:8081/repository/maven-public/</url>
     </repository>
   </repositories>
   <dependencies>
@@ -18,7 +18,7 @@
       <artifactId>java</artifactId>
       <version>8_102</version>
       <classifier>distrib</classifier>
-      <type>tar.gz</type>
+      <type>.tar.gz</type>
     </dependency>
   </dependencies>
 </project>
