@@ -102,7 +102,7 @@ sonar-scanner \
 
 
 ## Знакомство с Nexus
-
+ 
 ### Основная часть
 
 1. В репозиторий `maven-public` загружаем артефакт с GAV параметрами:
@@ -134,6 +134,7 @@ sonar-scanner \
   </versioning>
 </metadata>
 ```
+
 ![nexus01](https://user-images.githubusercontent.com/72273610/146909686-ea92c5e9-7944-4b94-9bb3-49ccd4fecc02.png)
 
 
@@ -143,6 +144,16 @@ sonar-scanner \
 
 1. Скачиваем дистрибутив с [maven](https://maven.apache.org/download.cgi)
 2. Разархивируем, делаем так, чтобы binary был доступен через вызов в shell (или меняем переменную PATH или любой другой удобный вам способ)
+
+```sh
+$ sudo mkdir /usr/local/maven
+cd /usr/local/maven
+$ sudo wget https://dlcdn.apache.org/maven/maven-3/3.8.4/binaries/apache-maven-3.8.4-bin.zip
+$ sudo unzip apache-maven-3.8.4-bin.zip
+$ sudo rm apache-maven-3.8.4-bin.zip
+$ sudo ln -s /usr/local/maven/apache-maven-3.8.4/bin/mvn /usr/bin/mvn
+```
+
 3. Удаляем из `apache-maven-<version>/conf/settings.xml` упоминание о правиле, отвергающем http соединение( раздел mirrors->id: my-repository-http-unblocker)
 
 Удалил участок кода:
@@ -194,7 +205,7 @@ OS name: "linux", version: "5.11.0-43-generic", arch: "amd64", family: "unix"
     <dependency>
       <groupId>netology</groupId>
       <artifactId>java</artifactId>
-      <version>8_102</version>
+      <version>8_282</version>
       <classifier>distrib</classifier>
       <type>tar.gz</type>
     </dependency>
@@ -224,17 +235,17 @@ $ mvn package
 [INFO] ------------------------------------------------------------------------
 ```
 
-8. Проверяем директорию `~/.m2/repository/`, находим наш артефакт
+1. Проверяем директорию `~/.m2/repository/`, находим наш артефакт
 
 ```sh
-$ ls -la ~/.m2/repository/netology/java/8_102/
+$ ls -la ~/.m2/repository/netology/java/8_282/
 total 560
 drwxrwxr-x 2 maxship maxship   4096 дек 26 18:21 .
 drwxrwxr-x 3 maxship maxship   4096 дек 26 18:21 ..
--rw-rw-r-- 1 maxship maxship 547096 дек 26 18:21 java-8_102-distrib.tar.gz
--rw-rw-r-- 1 maxship maxship     40 дек 26 18:21 java-8_102-distrib.tar.gz.sha1
--rw-rw-r-- 1 maxship maxship    350 дек 26 18:21 java-8_102.pom
--rw-rw-r-- 1 maxship maxship     40 дек 26 18:21 java-8_102.pom.sha1
+-rw-rw-r-- 1 maxship maxship 547096 дек 26 18:21 java-8_282-distrib.tar.gz
+-rw-rw-r-- 1 maxship maxship     40 дек 26 18:21 java-8_828-distrib.tar.gz.sha1
+-rw-rw-r-- 1 maxship maxship    350 дек 26 18:21 java-8_282.pom
+-rw-rw-r-- 1 maxship maxship     40 дек 26 18:21 java-8_282.pom.sha1
 -rw-rw-r-- 1 maxship maxship    200 дек 26 18:21 _remote.repositories
 ```
 
