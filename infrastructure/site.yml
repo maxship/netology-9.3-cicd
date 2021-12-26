@@ -247,6 +247,7 @@
         owner: "{{ nexus_user_name }}"
         path: "{{ item }}"
         state: directory
+        mode: 0755
       with_items:
         - "{{ nexus_directory_log }}"
         - "{{ nexus_directory_data }}"

@@ -16,9 +16,9 @@
     <dependency>
       <groupId>netology</groupId>
       <artifactId>java</artifactId>
-      <version>8_102</version>
+      <version>8_282</version>
       <classifier>distrib</classifier>
-      <type>tar.gz</type>
+      <type>.tar.gz</type>
     </dependency>
   </dependencies>
 </project>
