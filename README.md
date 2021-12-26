@@ -173,7 +173,7 @@ OS name: "linux", version: "5.11.0-43-generic", arch: "amd64", family: "unix"
 
 ### Основная часть
 
-1. Меняем в `pom.xml` блок с зависимостями под наш артефакт из первого пункта задания для Nexus (java с версией 8_282)
+6. Меняем в `pom.xml` блок с зависимостями под наш артефакт из первого пункта задания для Nexus (java с версией 8_282)
 
 ```xml
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -187,7 +187,7 @@ OS name: "linux", version: "5.11.0-43-generic", arch: "amd64", family: "unix"
     <repository>
       <id>my-repo</id>
       <name>maven-public</name>
-      <url>http://62.84.124.14/:8081/repository/maven-public/</url>
+      <url>http://62.84.124.14:8081/repository/maven-public/</url>
     </repository>
   </repositories>
   <dependencies>
@@ -202,40 +202,40 @@ OS name: "linux", version: "5.11.0-43-generic", arch: "amd64", family: "unix"
 </project>
 ```
 
-2. Запускаем команду `mvn package` в директории с `pom.xml`, ожидаем успешного окончания
+7. Запускаем команду `mvn package` в директории с `pom.xml`, ожидаем успешного окончания
 
-При запуске `mvn package` получаю ошибку, пока не разобрался в чем дело. 
+Pfgecrапуске `mvn package`: 
 
 ```bash
 $ mvn package
+...
 [INFO] Scanning for projects...
 [INFO] 
 [INFO] --------------------< com.netology.app:simple-app >---------------------
 [INFO] Building simple-app 1.0-SNAPSHOT
 [INFO] --------------------------------[ jar ]---------------------------------
-Downloading from my-repo: http://62.84.124.14/:8081/repository/maven-public/netology/java/8_102/java-8_102.pom
+...
+[INFO] Building jar: /home/maxship/devops/netology-9.3-cicd/mvn/target/simple-app-1.0-SNAPSHOT.jar
 [INFO] ------------------------------------------------------------------------
-[INFO] BUILD FAILURE
+[INFO] BUILD SUCCESS
 [INFO] ------------------------------------------------------------------------
-[INFO] Total time:  0.329 s
-[INFO] Finished at: 2021-12-21T17:56:24+06:00
+[INFO] Total time:  29.060 s
+[INFO] Finished at: 2021-12-26T18:22:18+06:00
 [INFO] ------------------------------------------------------------------------
-[ERROR] Failed to execute goal on project simple-app: Could not resolve dependencies for project com.netology.app:simple-app:jar:1.0-SNAPSHOT: Failed to collect dependencies at netology:java:tar.gz:distrib:8_102: Failed to read artifact descriptor for netology:java:tar.gz:distrib:8_102: Could not transfer artifact netology:java:pom:8_102 from/to my-repo (http://62.84.124.14/:8081/repository/maven-public/): transfer failed for http://62.84.124.14/:8081/repository/maven-public/netology/java/8_102/java-8_102.pom: Connect to 62.84.124.14:80 [/62.84.124.14] failed: Connection refused (Connection refused) -> [Help 1]
-[ERROR] 
-[ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
-[ERROR] Re-run Maven using the -X switch to enable full debug logging.
-[ERROR] 
-[ERROR] For more information about the errors and possible solutions, please read the following articles:
-[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/DependencyResolutionException
 ```
 
-3. Проверяем директорию `~/.m2/repository/`, находим наш артефакт
-4. В ответе присылаем исправленный файл `pom.xml`
+8. Проверяем директорию `~/.m2/repository/`, находим наш артефакт
 
----
+```sh
+$ ls -la ~/.m2/repository/netology/java/8_102/
+total 560
+drwxrwxr-x 2 maxship maxship   4096 дек 26 18:21 .
+drwxrwxr-x 3 maxship maxship   4096 дек 26 18:21 ..
+-rw-rw-r-- 1 maxship maxship 547096 дек 26 18:21 java-8_102-distrib.tar.gz
+-rw-rw-r-- 1 maxship maxship     40 дек 26 18:21 java-8_102-distrib.tar.gz.sha1
+-rw-rw-r-- 1 maxship maxship    350 дек 26 18:21 java-8_102.pom
+-rw-rw-r-- 1 maxship maxship     40 дек 26 18:21 java-8_102.pom.sha1
+-rw-rw-r-- 1 maxship maxship    200 дек 26 18:21 _remote.repositories
+```
 
-### Как оформить ДЗ?
-
-Выполненное домашнее задание пришлите ссылкой на .md-файл в вашем репозитории.
-
----
+9. В ответе присылаем исправленный файл `pom.xml`
