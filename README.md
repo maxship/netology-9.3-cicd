@@ -215,8 +215,6 @@ OS name: "linux", version: "5.11.0-43-generic", arch: "amd64", family: "unix"
 
 7. Запускаем команду `mvn package` в директории с `pom.xml`, ожидаем успешного окончания
 
-Pfgecrапуске `mvn package`: 
-
 ```bash
 $ mvn package
 ...
@@ -235,7 +233,7 @@ $ mvn package
 [INFO] ------------------------------------------------------------------------
 ```
 
-1. Проверяем директорию `~/.m2/repository/`, находим наш артефакт
+8. Проверяем директорию `~/.m2/repository/`, находим наш артефакт
 
 ```sh
 $ ls -la ~/.m2/repository/netology/java/8_282/
